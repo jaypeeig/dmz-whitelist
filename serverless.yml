@@ -31,6 +31,7 @@ provider:
 
   environment:
     SECURITY_GROUP_ID: sg-0f8a7e9def4e21eb1
+    TTL_IN_MINUTES: 5
 
 # you can add packaging information here
 #package:
@@ -43,11 +44,17 @@ provider:
 
 functions:
   connect:
-    handler: src/service.connect
+    handler: src/connect.handler
     events:
       - http:
           path: connect
           method: post
+  cleanup:
+    handler: src/cleanup.handler
+    events:
+      - schedule:
+          rate: rate(5 hours)
+          enabled: true
 
 # you can add CloudFormation resource templates here
 #resources:

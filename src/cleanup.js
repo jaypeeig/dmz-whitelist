@@ -29,6 +29,23 @@ const getIngressRules = (securityGroupId) => {
     });
 };
 
+const removeIngressRules = (params) => {
+  return new Promise((resolve, reject) => {
+    if (params.IpPermissions.length > 0) {
+      ec2.revokeSecurityGroupIngress(params, (err) => {
+        if (err) {
+          console.log(err)
+          return reject(err);
+        }
+        return resolve();
+      });
+    } else {
+      console.log('No ingress rules found');
+      return resolve();
+    }
+  });
+};
+
 const buildParams = (data) => {
   return {
     GroupId: process.env.SECURITY_GROUP_ID,

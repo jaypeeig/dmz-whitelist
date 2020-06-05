@@ -7,8 +7,7 @@ module.exports.handler = async event => {
     const {ip, port} = getParams(event);
     try {
       await getIngressRules(securityGroupId);
-      const response = await addIngressRules(ip, port);
-      return { statusCode, body: JSON.stringify(body) } = response;
+      return addIngressRules(ip, port);
     } catch (error) {
       return {
         statusCode: 400,
@@ -48,11 +47,12 @@ const addIngressRules = (ip, port) => {
         ]
     };
     ec2.authorizeSecurityGroupIngress(params, (err, data) => {
-      if (err) return resolve({statusCode: 400, body: err});
-      return resolve({statusCode: 200, body: {
-        message: `Ingress Rule for ${ip}/32:${port} added to ${securityGroupId}`,
+      if (err) return resolve({statusCode: 400, body: JSON.stringify(err)});
+      return resolve({statusCode: 200, body: JSON.stringify({
+        message: `Ingress Rule for ${ip}/32:${port} added to ${process.env.SECURITY_GROUP_ID}`,
         expireTime: timestamp_ttl
-      }});
+        })
+      });
     });
   });
 };

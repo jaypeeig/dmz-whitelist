@@ -16,8 +16,8 @@ service: dmz-whitelisting-service
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
-  region: ap-southeast-1
+  stage: ${opt:stage, 'dev'}
+  region: ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):REGION}
 
 # you can add statements to the Lambda function's IAM Role here
   iamRoleStatements:
@@ -26,12 +26,13 @@ provider:
         - "ec2:AuthorizeSecurityGroupIngress"
         - "ec2:RevokeSecurityGroupIngress"
         - "ec2:DescribeSecurityGroups"
-
       Resource: "*"
 
   environment:
-    SECURITY_GROUP_ID: sg-0f8a7e9def4e21eb1
-    TTL_IN_MINUTES: 5
+    TTL_IN_MINUTES: ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):TTL_IN_MINUTES}
+    SECURITY_GROUP_ID: ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):SECURITY_GROUP_ID}
+    API_URL: { "Fn::Join" : ["", [" https://", { "Ref" : "ApiGatewayRestApi" }, ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}/path/to/resource" ] ]  }
+
 
 # you can add packaging information here
 #package:
@@ -43,12 +44,18 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
+  generate:
+    handler: src/generate.handler
+    events:
+      - http:
+          path: generate
+          method: post
   connect:
     handler: src/connect.handler
     events:
       - http:
           path: connect
-          method: post
+          method: get
   cleanup:
     handler: src/cleanup.handler
     events:

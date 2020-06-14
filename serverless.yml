@@ -31,7 +31,7 @@ provider:
   environment:
     TTL_IN_MINUTES: ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):TTL_IN_MINUTES}
     SECURITY_GROUP_ID: ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):SECURITY_GROUP_ID}
-    API_URL: { "Fn::Join" : ["", [" https://", { "Ref" : "ApiGatewayRestApi" }, ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}/path/to/resource" ] ]  }
+    API_URL: { "Fn::Join" : ["", ["https://", { "Ref" : "ApiGatewayRestApi" }, ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}/" ] ]  }
 
 
 # you can add packaging information here

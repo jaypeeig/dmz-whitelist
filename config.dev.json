@@ -1,5 +1,6 @@
 {
     "REGION": "ap-southeast-1",
     "SECURITY_GROUP_ID": "sg-0f8a7e9def4e21eb1",
-    "TTL_IN_MINUTES": 5
+    "TTL_IN_MINUTES": 5,
+    "SLACK_TOKEN": "OcNUCaIbN9qfIhTYsR8tybBN"
 }

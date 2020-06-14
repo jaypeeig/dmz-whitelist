@@ -30,7 +30,7 @@ const getIngressRules = (securityGroupId) => {
 const addIngressRules = (ip, port) => {
   return new Promise((resolve, reject) => {
     const TTL_IN_MINUTES = process.env.TTL_IN_MINUTES || 2;
-    const timestamp_ttl = Math.floor(new Date().getTime() + (TTL_IN_MINUTES * 60));
+    const timestamp_ttl = Math.floor((new Date().getTime() / 1000) + (TTL_IN_MINUTES * 60));
 
     const params = {
         GroupId: process.env.SECURITY_GROUP_ID,
@@ -59,16 +59,15 @@ const addIngressRules = (ip, port) => {
 
 const getParams = (event) => {
   try {
-    const postBody = JSON.parse(event.body);
     return {
       ip:  event.headers['X-Forwarded-For'].split(',')[0].trim(),
-      port: postBody.port
+      port: process.env.PORT || 8080
     }
   } catch (e) {
     //return failover defaults
     return {
-      ip: '8.8.8.8',
-      port: 80
+      ip: '1.1.1.1',
+      port: 8080
     }
   }
 }

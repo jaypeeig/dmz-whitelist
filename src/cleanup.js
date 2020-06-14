@@ -55,7 +55,9 @@ const buildParams = (data) => {
       IpRanges: row.IpRanges.filter(ipSet => {
         const rule = Object.assign({Description:''}, ipSet);
         const timestamp_ttl = rule.Description.replace('TTL ', '').trim();
-        return (timestamp_ttl !== '' && parseInt(timestamp_ttl) < (new Date().getTime()));
+        console.log(`Timestamp TTL `, timestamp_ttl);
+        console.log(`Timestamp Current `, (new Date().getTime() / 1000));
+        return (timestamp_ttl !== '' && parseInt(timestamp_ttl) < (new Date().getTime() / 1000));
       }),
       ToPort: row.ToPort
     }))

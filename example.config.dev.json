@@ -2,5 +2,6 @@
     "REGION": "ap-southeast-1",
     "SECURITY_GROUP_ID": "sg-xxxxxxxxxxxxx",
     "TTL_IN_MINUTES": 5,
-    "SLACK_TOKEN": ""
+    "SLACK_TOKEN": "",
+    "PORT": 0
 }

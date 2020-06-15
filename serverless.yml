@@ -61,7 +61,7 @@ functions:
     handler: src/cleanup.handler
     events:
       - schedule:
-          rate: rate(5 hours)
+          rate: rate(45 minutes)
           enabled: true
 
 # you can add CloudFormation resource templates here
